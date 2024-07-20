@@ -14,11 +14,12 @@ const login = async (req, res, next) => {
         if (!authCheck) return res.json({ message: "Incorrect password" });
         const token = generateToken(user._id);
         res.cookie("token", token, {
-            withCredentials: true,
-            httpOnly: false
+          withCredentials: true,
+          httpOnly: false,
+          secure: true, // Ensures the cookie is only sent over HTTPS
+          sameSite: "None",
         });
-        res.status(201).json({ message: "User logged in successfully" })
-        next();
+        res.status(201).json({ message: "User logged in successfully" ,success:true})
     }
     catch (err) {
         console.log(err)

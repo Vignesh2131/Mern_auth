@@ -6,22 +6,30 @@ const signUpRoute = require("./routes/AuthRoute.routes")
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT;
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
 
 
-app.use(cors());
-app.use(express.json());
-app.use(cookieParser());
 mongoose
   .connect(process.env.MONGODB_CONNECTION_URI)
   .then(() => console.log("MongoDB is connected successfully"))
   .catch((err) => console.error(err));
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.use("/",signUpRoute)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
+app.use(express.json());
+
+
+
+app.use("/",signUpRoute)
+
